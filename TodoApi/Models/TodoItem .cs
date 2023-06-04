@@ -3,7 +3,17 @@
     public class TodoItem
     {
         public long Id { get; set; }
-        public string? Name { get; set; }
-        public bool IsComplete { get; set; }
+        public string DsTask { get; set; }
+        public bool Completed { get; set; }
+        public TodoItem(string dsTask)
+        {
+            DsTask = dsTask;
+        }
+
+        public TodoItem()
+        {
+
+        }
+
     }
 }
