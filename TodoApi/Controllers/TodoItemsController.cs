@@ -9,23 +9,15 @@ namespace TodoApi.Controllers
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
-        private readonly string _connectionString;
-
-        public TodoItemsController(IConfiguration configuration)
-        {
-            _connectionString = configuration.GetConnectionString("Todo");
-        }
-
-        // GET: api/TodoItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
             try
             {
                 List<TodoItem> list = new();
 
                 using (TaskDAO dao = new())
-                    list = dao.GetTasks();
+                    list = dao.GetTodoItems();
 
                 return Ok(list);
             }
@@ -43,7 +35,7 @@ namespace TodoApi.Controllers
                 TodoItem todoItem;
 
                 using (TaskDAO dao = new())
-                    todoItem = dao.GetTask(id);
+                    todoItem = dao.GetTodoItem(id);
 
                 return Ok(todoItem);
             }
@@ -53,7 +45,7 @@ namespace TodoApi.Controllers
             }
         }
 
-        [HttpPut("{data}")]
+        [HttpPut]
         public async Task<IActionResult> PutTodoItem(TodoItemDTO data)
         {
             try
@@ -76,7 +68,7 @@ namespace TodoApi.Controllers
             long id;
             try
             {
-                if (!TodoItemExists(data.Description))
+                if (!TodoItemExists(data.DsTodoItem))
                 {
                     TodoItem TodoItem = Mapping.TodoItemMapping.MapToObject(data);
 
@@ -117,7 +109,7 @@ namespace TodoApi.Controllers
             try
             {
                 using TaskDAO dao = new();
-                return dao.GetTasks().Exists(c => c.DsTask == description);
+                return dao.GetTodoItems().Exists(c => c.DsTodoItem == description);
             }
             catch(Exception ex) {
                 throw new Exception(ex.Message);

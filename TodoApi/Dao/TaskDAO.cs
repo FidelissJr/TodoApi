@@ -6,21 +6,18 @@ namespace TodoApi.DAO
 {
     public class TaskDAO : IDisposable
     {
-        //private readonly string _connectionString;
-        
-       
-        private const string CONNECTION_STRING = @"Server=DESKTOP-DK1E33S\SQLEXPRESS; Database=Todo; Integrated Security=True; trustServerCertificate=true";
-        //private const string CONNECTION_STRING = @"Server=192.168.2.184\SQLEXPRESS;Database=Rodoviaria;User Id=sa;Password=sa@123;";
+        private const string CONNECTION_STRING = @"Server=DESKTOP-DK1E33S\SQLEXPRESS; Database=Todo; User Id=dev; Password=dev@123;";
+
         SqlConnection conn = new(CONNECTION_STRING);
         public TaskDAO()
         {
         }
-        public List<TodoItem> GetTasks()
+        public List<TodoItem> GetTodoItems()
         {
             List<TodoItem> items = conn.Query<TodoItem>("SELECT * FROM TodoItem").ToList();
             return items;
         }
-        public TodoItem GetTask(long id)
+        public TodoItem GetTodoItem(long id)
         {
             TodoItem items = conn.QueryFirstOrDefault<TodoItem>("SELECT * FROM TodoItem WHERE id = @Id", new { Id = id});
             return items;
@@ -28,12 +25,12 @@ namespace TodoApi.DAO
 
         public long PostTodoItem(TodoItem todoItem)
         {
-            long id = conn.ExecuteScalar<long>("INSERT INTO TodoItem (DsTask) VALUES (@Description)", new { Description =  todoItem.DsTask});
+            long id = conn.ExecuteScalar<long>("INSERT INTO TodoItem (DsTodoItem) VALUES (@Description)", new { Description =  todoItem.DsTodoItem });
             return id;
         }
         public long PutTodoItem(TodoItem todoItem)
         {
-            long id = conn.ExecuteScalar<long>("UPDATE TodoItem SET DsTask = @Description WHERE id = @Id", new { Description = todoItem.DsTask, todoItem.Id });
+            long id = conn.ExecuteScalar<long>("UPDATE TodoItem SET DsTodoItem = @DsTodoItem, Completed = @Completed WHERE id = @Id", new { todoItem.DsTodoItem, todoItem.Completed, todoItem.Id });
             return id;
         }
 

@@ -7,12 +7,7 @@ namespace TodoApi.Mapping
     {
         public static TodoItem MapToObject(TodoItemDTO todoItemDTO)
         {
-            return new TodoItem
-            {
-                DsTask = todoItemDTO.Description,
-                Id = todoItemDTO.Id > 0 ? todoItemDTO.Id : 0,
-                Completed = todoItemDTO.Completed,
-            };
+            return new TodoItem(todoItemDTO.DsTodoItem, todoItemDTO.Completed, todoItemDTO.Id);
         }
     }
 }
